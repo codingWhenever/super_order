@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/ll_header"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/color_white"
+                android:elevation="3px"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="0dp"
+                android:paddingRight="@dimen/activity_vertical_margin">
+
+
+    <ImageView
+        android:id="@+id/ic_goback"
+        android:layout_width="30dp"
+        android:layout_height="match_parent"
+        android:onClick="goBack"
+        android:paddingLeft="@dimen/activity_vertical_margin"
+        android:scaleType="centerInside"
+        android:src="@mipmap/ic_back_black"/>
+
+    <TextView
+        android:id="@+id/tv_left"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:drawableLeft="@mipmap/ic_drop_down_arrow"
+        android:drawablePadding="6dp"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:text="定位中..."
+        android:textSize="@dimen/dimen_13"
+        android:visibility="gone"/>
+
+    <ImageView
+        android:id="@+id/ic_finish"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_toRightOf="@+id/ic_goback"
+        android:minWidth="30dp"
+        android:onClick="closeWebView"
+        android:scaleType="centerInside"
+        android:src="@mipmap/nav_x_black"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="@dimen/dimen_8"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_toLeftOf="@+id/btn_other_action"
+        android:layout_toRightOf="@id/ic_finish"
+        android:ellipsize="end"
+        android:gravity="center"
+        android:maxLines="1"
+        android:text=""
+        android:textColor="@color/color_black"
+        android:textSize="@dimen/dimen_17"/>
+
+
+    <TextView
+        android:id="@+id/tv_right_text"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/tv_title"
+        android:layout_alignParentRight="true"
+        android:gravity="center_vertical"
+        android:text="充值记录"
+        android:textSize="@dimen/dimen_13"
+        android:visibility="invisible"/>
+
+
+    <ImageView
+        android:id="@+id/btn_other_action"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:gravity="center"
+        android:src="@mipmap/ic_scan"
+        android:text="other"
+        android:visibility="gone"/>
+
+</RelativeLayout>

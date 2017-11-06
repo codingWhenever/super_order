@@ -3,4 +3,11 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+
+
+    <string name="str_net_error_tip">您的网络好像不给力，请重试</string>
+    <string name="str_load_failure_tip">加载失败，请重试</string>
+    <string name="str_located_failure_tip">定位异常，请重试</string>
+    <string name="str_reload">重新加载</string>
+    <string name="str_relocate">手动定位</string>
 </resources>

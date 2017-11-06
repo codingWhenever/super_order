@@ -15,4 +15,6 @@ public interface BaseView {
     void showDefaultPage(int type);
 
     void retry();
+
+    void setTitle(String title);
 }
