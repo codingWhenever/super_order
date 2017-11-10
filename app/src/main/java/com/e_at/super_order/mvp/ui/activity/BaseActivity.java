@@ -1,15 +1,22 @@
 package com.e_at.super_order.mvp.ui.activity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.e_at.eatlibrary.injection.Ioc;
 import com.e_at.super_order.R;
 import com.e_at.super_order.application.OrderApplication;
 import com.e_at.super_order.mvp.presenter.BasePresenter;
@@ -31,7 +38,7 @@ import static com.e_at.super_order.utils.Constants.TYPE_DEFAULT_PAGE_NET_ERROR;
  * @email lei.lu@e-at.com
  */
 public abstract class BaseActivity extends AppCompatActivity implements BaseView {
-    private Context mContext;
+    protected Context mContext;
     protected View defaultPage, mainPage;
     public int defaultPageType = TYPE_DEFAULT_PAGE_NET_ERROR;
     public boolean isNeedShowDefault = true;//是否需要显示无网或者加载失败的占位图
@@ -40,6 +47,24 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
 
 
     public BasePresenter<BaseView> mBasePresenter;
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(layoutResID);
+        Ioc.initInjectedView(this, getWindow().getDecorView());
+    }
+
+    @Override
+    public void setContentView(View view) {
+        super.setContentView(view);
+        Ioc.initInjectedView(this, getWindow().getDecorView());
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        super.setContentView(view, params);
+        Ioc.initInjectedView(this, getWindow().getDecorView());
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,6 +104,7 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
 //        mainPage = findViewById(R.id.layout_main);
 //        defaultPage = findViewById(R.id.layout_default);
     }
+
     /**
      * 显示默认占位图
      *
@@ -162,5 +188,46 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+    }
+
+
+    public ProgressDialog dialog;
+
+    /**
+     * 显示加载对话框
+     *
+     * @return
+     * @paramters
+     */
+    public void showLoadingDialog(@Nullable String info) {
+        dialog = ProgressDialog.show(mContext, null, null, true, true);
+        View view = LayoutInflater.from(mContext).inflate(R.layout.layout_loading_view, null);
+        dialog.setContentView(view);
+        if (!TextUtils.isEmpty(info)) {
+            dialog.setCancelable(false);
+            dialog.setMessage(info);
+        }
+        Point size = new Point();
+        dialog.getWindow().getWindowManager().getDefaultDisplay().getSize(size);
+        int width = size.x;
+        WindowManager.LayoutParams lps = dialog.getWindow().getAttributes();
+        lps.alpha = 0.8f;
+        lps.gravity = Gravity.CENTER;
+        lps.width = width / 3;
+        lps.height = width / 3;
+        lps.dimAmount = 0.4f;
+        dialog.getWindow().setAttributes(lps);
+    }
+
+    /**
+     * 隐藏对话框
+     *
+     * @return
+     * @paramters
+     */
+    public void dismissDialog() {
+        if (dialog != null && dialog.isShowing()) {
+            dialog.dismiss();
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.e_at.eatlib.injection;
+package com.e_at.eatlibrary.injection;
 
 
 import java.lang.annotation.ElementType;

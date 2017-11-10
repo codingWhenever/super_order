@@ -1,1 +1,1 @@
-include ':app', ':eatlib'
+include ':app', ':eatlibrary'

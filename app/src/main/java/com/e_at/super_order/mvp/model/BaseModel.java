@@ -9,4 +9,9 @@ package com.e_at.super_order.mvp.model;
  * @email lei.lu@e-at.com
  */
 public interface BaseModel {
+
+
+//    void addSubscriber(Observable observable, Subscriber subscriber);
+//
+//    void unSubscribe();
 }
