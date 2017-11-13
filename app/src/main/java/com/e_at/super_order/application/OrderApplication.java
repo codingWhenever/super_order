@@ -31,6 +31,16 @@ public class OrderApplication extends Application {
 
     }
 
+    /**
+     * 更新app
+     *
+     * @return
+     * @paramters
+     */
+    public void updateApp() {
+
+    }
+
     private OperationObserver mOperationObserver;
 
     public OperationObserver getOperationObserver() {

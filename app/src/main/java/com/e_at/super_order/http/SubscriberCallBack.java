@@ -42,14 +42,14 @@ public class SubscriberCallBack<T> extends Subscriber<T> {
         Logger.d(t.toString());
         if (t instanceof BaseEntity) {
             BaseEntity entity = (BaseEntity) t;
-            if (entity.status == RESPONSE_CODE_SUCCESS) {//成功
+            if (entity.status == RESPONSE_CODE_SUCCESS || entity.status == 2) {//成功
                 mApiCallBack.onSuccess(t);
             } else if (entity.status == RESPONSE_CODE_INVALID_TOKEN) {//无效token
-
+                mApiCallBack.onBadToken();
             } else if (entity.status == RESPONSE_CODE_ERROR) {//失败
                 mApiCallBack.onFailure(entity.info);
             } else if (entity.status == RESPONSE_CODE_UPDATE_APP_VERSION) {//检测到新版本
-
+                mApiCallBack.onAppUpdate(t);
             }
         }
     }

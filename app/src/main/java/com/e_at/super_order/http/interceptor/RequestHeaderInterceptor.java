@@ -2,7 +2,7 @@ package com.e_at.super_order.http.interceptor;
 
 
 import com.e_at.super_order.application.OrderApplication;
-import com.e_at.super_order.utils.GeneralUtil;
+import com.e_at.eatlibrary.utils.GeneralUtil;
 import com.e_at.super_order.utils.SpConfigUtil;
 import com.orhanobut.logger.Logger;
 

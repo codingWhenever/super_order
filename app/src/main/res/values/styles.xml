@@ -8,8 +8,70 @@
         <!--<item name="colorAccent">@color/colorAccent</item>-->
         <item name="android:textColor">@color/color_main_black</item>
         <item name="android:textSize">@dimen/dimen_15</item>
-        <item name="android:windowBackground">@color/color_white</item>
+        <item name="android:windowBackground">@null</item>
         <item name="android:windowContentOverlay">@null</item>
+        <item name="alertDialogTheme">@style/AppTheme.Dialog.Alert</item>
+        <item name="android:actionOverflowButtonStyle">@style/MyOverflowStyle</item>
+
     </style>
 
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.AppBaseTheme">
+        <!--设置窗口为透明窗体，所以APP启动时的黑白屏也变成了透明的-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+
+    <style name="MyOverflowStyle" parent="@android:style/Widget.ActionButton.Overflow">
+        <!--<item name="android:src">@drawable/actionbar_more</item>-->
+    </style>
+
+    <!--主界面主题-->
+    <style name="AppTheme.NoActionBar.AppBaseThemeMain">
+        <item name="android:windowIsTranslucent">false</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.AppWelcome">
+        <item name="android:windowBackground">@mipmap/bg_splash</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@style/activityAnimation</item>
+    </style>
+
+    <style name="AppTheme.Dialog.Alert" parent="Theme.AppCompat.Light.Dialog.Alert"></style>
+
+    <style name="TransparentStyleBottom" parent="@style/AppTheme">
+
+        <item name="android:windowFrame">@null</item>
+        <!--边框-->
+        <item name="android:windowAnimationStyle">@style/AnimBottom</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <!--半透明-->
+        <item name="android:windowNoTitle">true</item>
+        <!--无标题-->
+        <!--<item name="android:windowBackground">@android:color/transparent</item>&lt;!&ndash;背景透明&ndash;&gt;-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--模糊-->
+    </style>
+
+    <!--动画定义-->
+    <style name="AnimBottom" parent="@android:style/Animation" type="text/css">
+
+        <!--滑入动画-->
+        <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
+        <!--滑出动画-->
+        <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
+    </style>
+
+    <!-- animation 样式 -->
+    <style name="activityAnimation" parent="@android:style/Animation">
+        <item name="android:activityOpenEnterAnimation">@anim/slide_right_in</item>
+        <item name="android:activityOpenExitAnimation">@anim/slide_left_out</item>
+        <item name="android:activityCloseEnterAnimation">@anim/slide_left_in</item>
+        <item name="android:activityCloseExitAnimation">@anim/slide_right_out</item>
+    </style>
 </resources>

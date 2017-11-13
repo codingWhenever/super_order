@@ -22,7 +22,7 @@ import com.e_at.super_order.application.OrderApplication;
 import com.e_at.super_order.mvp.presenter.BasePresenter;
 import com.e_at.super_order.mvp.view.BaseView;
 import com.e_at.super_order.utils.Constants;
-import com.e_at.super_order.utils.NetworkUtil;
+import com.e_at.eatlibrary.utils.NetworkUtil;
 
 import java.util.LinkedList;
 import java.util.List;

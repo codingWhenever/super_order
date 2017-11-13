@@ -1,7 +1,7 @@
 package com.e_at.super_order.mvp.model;
 
 
-import com.e_at.super_order.mvp.entity.LoginEntity;
+import com.e_at.super_order.mvp.entity.BaseEntity;
 
 /**
  * LoginModel
@@ -13,15 +13,35 @@ import com.e_at.super_order.mvp.entity.LoginEntity;
  */
 public interface LoginModel extends BaseModel {
 
-    void login(String phone, String code, OnLoginListener listener);
+    void login(String phone, String code, OnResponseListener listener);
 
-    void getShareLogInfo(String phone, String platformMemberId);
+    void getShareLogInfo(String phone, String platformMemberId, OnResponseListener listener);
 
-    interface OnLoginListener {
-        void loginSuccess(LoginEntity loginEntity);
+    void getSMSCode(String phone, onSMSListener listener);
 
-        void loginFailed(String message);
+    void getVoiceCode(String phone, onVoiceCodeListener listener);
+
+    interface OnResponseListener {
+        void onSuccess(BaseEntity loginEntity);
+
+        void onFailed(String message);
 
         void dismissLoading();
+    }
+
+    interface onSMSListener {
+        void onSuccess(BaseEntity baseEntity);
+
+        void onFailed(String message);
+
+        void dismissDialog();
+    }
+
+    interface onVoiceCodeListener {
+        void onSuccess(BaseEntity baseEntity);
+
+        void onFailed(String message);
+
+        void dismissDialog();
     }
 }

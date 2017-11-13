@@ -6,11 +6,14 @@ import com.e_at.super_order.application.OrderApplication;
 import com.e_at.super_order.http.ApiCallBack;
 import com.e_at.super_order.http.ParamsUtil;
 import com.e_at.super_order.http.SubscriberCallBack;
+import com.e_at.super_order.mvp.entity.BaseEntity;
 import com.e_at.super_order.mvp.entity.LoginEntity;
+import com.e_at.super_order.mvp.entity.PromotionEntity;
 import com.e_at.super_order.mvp.model.LoginModel;
 import com.e_at.super_order.utils.Constants;
-import com.e_at.super_order.utils.DeviceUtil;
-import com.e_at.super_order.utils.GeneralUtil;
+import com.e_at.eatlibrary.utils.DeviceUtil;
+import com.e_at.eatlibrary.utils.GeneralUtil;
+import com.e_at.super_order.utils.SpConfigUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +29,7 @@ import java.util.Map;
 public class LoginModelImpl extends BaseModelImpl implements LoginModel {
 
     @Override
-    public void login(String phone, String code, final OnLoginListener listener) {
+    public void login(String phone, String code, final OnResponseListener listener) {
         Map<String, String> params = new HashMap<>();
         params.put("phone", phone);
         params.put("vCode", code);
@@ -44,12 +47,12 @@ public class LoginModelImpl extends BaseModelImpl implements LoginModel {
 
                     @Override
                     public void onSuccess(LoginEntity data) {
-                        listener.loginSuccess(data);
+                        listener.onSuccess(data);
                     }
 
                     @Override
                     public void onFailure(String message) {
-                        listener.loginFailed(message);
+                        listener.onFailed(message);
                     }
 
                     @Override
@@ -61,7 +64,77 @@ public class LoginModelImpl extends BaseModelImpl implements LoginModel {
     }
 
     @Override
-    public void getShareLogInfo(String phone, String platformMemberId) {
+    public void getShareLogInfo(String phone, String platformMemberId, final OnResponseListener listener) {
 
+        Map<String, String> params = new HashMap<>();
+        params.put("groupId", "1001");
+        params.put("phone", SpConfigUtil.getPhone(OrderApplication.getInstance()));
+        params.put("terminal", "1");
+        params.put("platformMemberId", String.valueOf(SpConfigUtil.getPlatFormMemberId(OrderApplication.getInstance())));
+        params.put("fromType", "7");
+        addSubscriber(OrderApplication.sApiStores.getShareLogInfo(ParamsUtil.packageParams(params)),
+                new SubscriberCallBack(new ApiCallBack<PromotionEntity>() {
+                    @Override
+                    public void onSuccess(PromotionEntity data) {
+                        listener.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        listener.onFailed(message);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        listener.dismissLoading();
+                    }
+                }));
+        
+    }
+
+    @Override
+    public void getSMSCode(String phone, final onSMSListener listener) {
+        Map<String, String> params = new HashMap<>();
+        params.put("phone", phone);
+        addSubscriber(OrderApplication.sApiStores.getSMSCode(ParamsUtil.packageParams(params)),
+                new SubscriberCallBack(new ApiCallBack<BaseEntity>() {
+                    @Override
+                    public void onSuccess(BaseEntity data) {
+                        listener.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        listener.onFailed(message);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        listener.dismissDialog();
+                    }
+                }));
+    }
+
+    @Override
+    public void getVoiceCode(String phone, final onVoiceCodeListener listener) {
+        Map<String, String> params = new HashMap<>();
+        params.put("phone", phone);
+        addSubscriber(OrderApplication.sApiStores.getVoiceCode(ParamsUtil.packageParams(params)),
+                new SubscriberCallBack(new ApiCallBack<BaseEntity>() {
+                    @Override
+                    public void onSuccess(BaseEntity data) {
+                        listener.onSuccess(data);
+                    }
+
+                    @Override
+                    public void onFailure(String message) {
+                        listener.onFailed(message);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        listener.dismissDialog();
+                    }
+                }));
     }
 }

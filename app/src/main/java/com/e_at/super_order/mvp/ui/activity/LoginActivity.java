@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Selection;
+import android.text.Spannable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.util.Linkify;
@@ -17,16 +19,18 @@ import android.widget.TextView;
 import com.e_at.eatlibrary.injection.From;
 import com.e_at.super_order.R;
 import com.e_at.super_order.application.OrderApplication;
+import com.e_at.super_order.mvp.entity.BaseEntity;
 import com.e_at.super_order.mvp.entity.LoginEntity;
+import com.e_at.super_order.mvp.entity.PromotionEntity;
 import com.e_at.super_order.mvp.presenter.impl.LoginPresenterImpl;
 import com.e_at.super_order.mvp.view.LoginView;
 import com.e_at.super_order.observer.OperationObserver;
 import com.e_at.super_order.utils.Constants;
-import com.e_at.super_order.utils.DeviceUtil;
-import com.e_at.super_order.utils.NetworkUtil;
-import com.e_at.super_order.utils.RegexUtil;
+import com.e_at.eatlibrary.utils.DeviceUtil;
+import com.e_at.eatlibrary.utils.NetworkUtil;
+import com.e_at.eatlibrary.utils.RegexUtil;
 import com.e_at.super_order.utils.SpConfigUtil;
-import com.e_at.super_order.utils.ToastUtil;
+import com.e_at.eatlibrary.utils.ToastUtil;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -54,6 +58,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
     private static final int CODE_LIMIT_COUNT = 4;
     private LoginPresenterImpl mPresenter;
     private int needLoginType;//需要登录权限
+    private String phone;
+    private int count = 0;
 
     @Override
     public void initView(Bundle savedInstanceState) {
@@ -134,7 +140,35 @@ public class LoginActivity extends BaseActivity implements LoginView {
         return R.layout.activity_login_simple;
     }
 
+    /**
+     * 获取验证码
+     *
+     * @return
+     * @paramters
+     */
+    public void getVerCode(View view) {
+        if (!NetworkUtil.checkNetwork(mContext)) {
+            return;
+        }
+        phone = etPhone.getText().toString().trim();
+        if (!RegexUtil.isMobileSimple(phone)) {
+            ToastUtil.showToast(mContext, "请输入正确手机号");
+            return;
+        }
+        if (count > 0) {
+            return;
+        }
 
+        mPresenter.getSMSCode(phone);
+
+    }
+
+    /**
+     * 登录
+     *
+     * @return
+     * @paramters
+     */
     public void login(View view) {
         if (!NetworkUtil.checkNetwork(mContext)) {
             return;
@@ -154,8 +188,22 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     }
 
+    /**
+     * 清空手机号码
+     *
+     * @return
+     * @paramters
+     */
+    public void cleanPhone(View view) {
+        phone = etPhone.getText().toString().trim();
+        if (!TextUtils.isEmpty(phone)) {
+            etPhone.setText("");
+        }
+    }
+
     @Override
     public void loginSuccess(LoginEntity loginEntity) {
+
 
         showToast("登录成功");
         saveUserInfo(loginEntity);
@@ -177,7 +225,8 @@ public class LoginActivity extends BaseActivity implements LoginView {
         registerJPush(loginEntity.getResponse().getPhone());
 
 
-
+        mPresenter.getShareLogInfo(loginEntity.getResponse().getPhone(),
+                String.valueOf(loginEntity.getResponse().getPlatformMemberId()));
     }
 
 
@@ -193,6 +242,12 @@ public class LoginActivity extends BaseActivity implements LoginView {
 //                });
     }
 
+    /**
+     * 本地保存用户信息
+     *
+     * @return
+     * @paramters
+     */
     private void saveUserInfo(LoginEntity loginEntity) {
         SpConfigUtil.setDeviceId(LoginActivity.this, DeviceUtil.getMACAddress(LoginActivity.this.getApplicationContext()));
         SpConfigUtil.setToken(LoginActivity.this, TextUtils.isEmpty(loginEntity.getResponse().getToken()) ? "" : loginEntity.getResponse().getToken());
@@ -203,7 +258,6 @@ public class LoginActivity extends BaseActivity implements LoginView {
 
     @Override
     public void loginFailed(String message) {
-
         showToast(message);
     }
 
@@ -217,6 +271,83 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void disabledLogin() {
         btnLogin.setClickable(false);
         btnLogin.setAlpha(0.5f);
+    }
+
+    @Override
+    public void getShareInfoSuccess(PromotionEntity data) {
+        if (data.status == 1) {
+            SpConfigUtil.setHasPromition(mContext, true);
+            SpConfigUtil.setShareURLPrefix(mContext, data.getResponse().getShareUrl());
+            SpConfigUtil.setPromotionId(mContext, data.getResponse().getPromotionId());
+            SpConfigUtil.setMemberId(mContext, data.getResponse().getMemberId());
+        } else if (data.status == 2) {
+            //没有活动保存默认分享地址及其标题和描述
+            SpConfigUtil.setHasPromition(mContext, false);
+        }
+        if (data.status != -1) {
+            SpConfigUtil.setDefaultShareURL(mContext, data.getResponse().getDefaultUrl());
+            SpConfigUtil.setDefaultShareTitle(mContext, data.getResponse().getDefaultTitle());
+            SpConfigUtil.setDefaultShareDesc(mContext, data.getResponse().getDefaultDesc());
+        }
+    }
+
+    @Override
+    public void getInfoFailed(String message) {
+
+    }
+
+    @Override
+    public void getSMSCodeSuccess(BaseEntity baseEntity) {
+        count = 60;
+        codeCounter(findViewById(R.id.tv_code));
+        showToast(baseEntity.info);
+        jumpToCodeText();
+
+    }
+
+    @Override
+    public void getSMSCodeFailed(String message) {
+        showToast(message);
+    }
+
+    private void jumpToCodeText() {
+        phone = etPhone.getText().toString().trim();
+        if (RegexUtil.isMobileSimple(phone)) {
+            etCode.requestFocus();
+            CharSequence code = etCode.getText();
+            if (code instanceof Spannable) {
+                Selection.setSelection((Spannable) code, code.length());
+            }
+        }
+    }
+
+    @Override
+    public void codeCounter(final View view) {
+        if (count > 0) {
+            findViewById(R.id.ll_text).setVisibility(View.VISIBLE);
+        }
+        view.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                count--;
+                if (count > 0) {
+                    ((TextView) view).setText("重新获取(" + count + "s)");
+                    codeCounter(view);
+                } else {
+                    ((TextView) view).setText("获取验证码");
+                }
+            }
+        }, 1000);
+    }
+
+    @Override
+    public void getVoiceCodeSuccess(BaseEntity data) {
+        showToast("您将收到来自02566040868的语音电话，请注意接听。");
+    }
+
+    @Override
+    public void getVoiceCodeFailed(String message) {
+
     }
 
     @Override
@@ -239,6 +370,5 @@ public class LoginActivity extends BaseActivity implements LoginView {
     public void showLoading(@Nullable String loadingMessage) {
         showLoadingDialog("登录中...");
     }
-
 
 }
