@@ -57,6 +57,11 @@ public class SplashActivity extends BaseActivity implements SplashView {
     }
 
     @Override
+    public boolean setImmersive() {
+        return true;
+    }
+
+    @Override
     protected void onResume() {
         isNeedShowDefault = false;
         super.onResume();
@@ -117,7 +122,7 @@ public class SplashActivity extends BaseActivity implements SplashView {
             mIntent.putExtra("imgPath", mAdEntity.adImgPath);
             mIntent.putExtra("duration", mAdEntity.adDuration);
         } else {
-            mIntent.setClass(mContext, MainActivity.class);
+            mIntent.setClass(mContext, HomeActivity.class);
         }
         mHandler.postDelayed(mRunnable, delay);
     }

@@ -74,6 +74,11 @@ public class LoginActivity extends BaseActivity implements LoginView {
     }
 
     @Override
+    public boolean setImmersive() {
+        return false;
+    }
+
+    @Override
     protected void onResume() {
         isNeedShowDefault = false;
         super.onResume();
@@ -208,7 +213,7 @@ public class LoginActivity extends BaseActivity implements LoginView {
         showToast("登录成功");
         saveUserInfo(loginEntity);
         //todo
-        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         if (needLoginType > 0) {
             intent.putExtra(Constants.STR_NEED_LOGIN_TYPE, needLoginType);
             startActivity(intent);

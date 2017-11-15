@@ -10,4 +10,10 @@
     <string name="str_located_failure_tip">定位异常，请重试</string>
     <string name="str_reload">重新加载</string>
     <string name="str_relocate">手动定位</string>
+
+
+    <string name="str_tab_dish">点餐</string>
+    <string name="str_tab_order">订单</string>
+    <string name="str_tab_recharge">充值</string>
+    <string name="str_tab_my">我的</string>
 </resources>

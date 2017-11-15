@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <com.e_at.eatlibrary.widget.NonScrollViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+    </com.e_at.eatlibrary.widget.NonScrollViewPager>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_ee"/>
+
+    <com.lzy.widget.AlphaIndicator
+        android:id="@+id/alphaIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50"
+        android:gravity="center|bottom"
+        android:orientation="horizontal">
+
+        <com.lzy.widget.AlphaView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/dimen_6"
+            app:av_tabIconNormal="@mipmap/tab_dinner_nor"
+            app:av_tabIconSelected="@mipmap/tab_dinner_pressed"
+            app:av_tabText="@string/str_tab_dish"
+            app:av_tabTextSize="@dimen/dimen_9"
+            app:av_textColorNormal="@color/color_main_black"
+            app:av_textColorSelected="@color/color_main_black"/>
+
+        <com.lzy.widget.AlphaView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/dimen_6"
+            app:av_tabIconNormal="@mipmap/tab_order_nor"
+            app:av_tabIconSelected="@mipmap/tab_order_pressed"
+            app:av_tabText="@string/str_tab_order"
+            app:av_tabTextSize="@dimen/dimen_9"
+            app:av_textColorNormal="@color/color_main_black"
+            app:av_textColorSelected="@color/color_main_black"/>
+
+        <com.lzy.widget.AlphaView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/dimen_6"
+            app:av_tabIconNormal="@mipmap/tab_recharge_nor"
+            app:av_tabIconSelected="@mipmap/tab_recharge_pressed"
+            app:av_tabText="@string/str_tab_recharge"
+            app:av_tabTextSize="@dimen/dimen_9"
+            app:av_textColorNormal="@color/color_main_black"
+            app:av_textColorSelected="@color/color_main_black"/>
+
+        <com.lzy.widget.AlphaView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:padding="@dimen/dimen_6"
+            app:av_tabIconNormal="@mipmap/tab_my_nor"
+            app:av_tabIconSelected="@mipmap/tab_my_pressed"
+            app:av_tabText="@string/str_tab_my"
+            app:av_tabTextSize="@dimen/dimen_9"
+            app:av_textColorNormal="@color/color_main_black"
+            app:av_textColorSelected="@color/color_main_black"/>
+    </com.lzy.widget.AlphaIndicator>
+
+</LinearLayout>

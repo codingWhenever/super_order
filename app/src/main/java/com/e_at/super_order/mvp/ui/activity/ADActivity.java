@@ -60,6 +60,11 @@ public class ADActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean setImmersive() {
+        return true;
+    }
+
     private Handler mHandler = new Handler();
     private Runnable mRunnable = new Runnable() {
         @Override
@@ -75,7 +80,7 @@ public class ADActivity extends BaseActivity {
 
     private void jumpOverAuto(long delayMillis) {
         final Intent intent = new Intent();
-        intent.setClass(this, MainActivity.class);
+        intent.setClass(this, HomeActivity.class);
 
         new Handler().postDelayed(new Runnable() {
             @Override

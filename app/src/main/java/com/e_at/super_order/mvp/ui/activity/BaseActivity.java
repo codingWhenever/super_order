@@ -13,16 +13,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.e_at.eatlibrary.immersionbar.ImmersionBar;
 import com.e_at.eatlibrary.injection.Ioc;
+import com.e_at.eatlibrary.utils.NetworkUtil;
 import com.e_at.super_order.R;
 import com.e_at.super_order.application.OrderApplication;
 import com.e_at.super_order.mvp.presenter.BasePresenter;
 import com.e_at.super_order.mvp.view.BaseView;
 import com.e_at.super_order.utils.Constants;
-import com.e_at.eatlibrary.utils.NetworkUtil;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -81,10 +83,50 @@ public abstract class BaseActivity extends AppCompatActivity implements BaseView
         this.mContext = this;
         initView(savedInstanceState);
 
+        boolean isImmersive = setImmersive();
+        if (isImmersive) {
+            setFitSystemWindows();
+            initDefaultImmersionBar();
+        } else {
+            initImmersionBar();
+        }
         if (!sActivityList.contains(this)) {
             sActivityList.add(this);
         }
     }
+
+    private void setFitSystemWindows() {
+        ViewGroup mContentView = (ViewGroup) getWindow().findViewById(Window.ID_ANDROID_CONTENT);
+        View mChildView = mContentView.getChildAt(0);
+        if (mChildView != null) {
+            mChildView.setFitsSystemWindows(true);
+        }
+    }
+
+    /**
+     * 设置默认样式
+     *
+     * @return
+     * @paramters
+     */
+    private void initDefaultImmersionBar() {
+        ImmersionBar.with(this).statusBarColor(R.color.color_white)
+                .statusBarDarkFont(true, 0.2f)
+                .navigationBarColor(R.color.color_black)
+                .init();
+    }
+
+    /**
+     * 根据各页面实际情况自定义
+     *
+     * @return
+     * @paramters
+     */
+    public void initImmersionBar() {
+        ImmersionBar.with(this).init();
+    }
+
+    public abstract boolean setImmersive();
 
     public abstract int getLayoutId();
 
